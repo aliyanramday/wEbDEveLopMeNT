@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mickey Mouse Restaurant</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom right, #3366ff, #99ccff);
+            color: #000;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .carousel {
+            width: 600px;
+            height: 300px;
+            overflow: hidden;
+            margin: auto;
+            position: relative;
+        }
+
+        .slides {
+            display: flex;
+            width: 1200px;
+            animation: slide 6s infinite alternate;
+        }
+
+        .slides img {
+            width: 600px;
+            height: 300px;
+            flex-shrink: 0;
+        }
+
+        @keyframes slide {
+            0%, 45% { transform: translateX(0); }
+            55%, 100% { transform: translateX(-600px); }
+        }
+
+        form {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .form-section {
+            text-align: left;
+        }
+
+        .image-row img{
+            width:150px;
+            height:120px;
+            margin:15px;
+            transition: transform 0.3s ease;
+        }
+
+        .image-row img:hover {
+            transform: scale(1.1);
+        }
+
+        .image-row {
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        .button-group {
+            margin-top: 10px;
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #0044cc;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        button:hover {
+            background-color: #002a80;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Get The Delicious Roasted Chicken Right At Your Door</h2>
+
+    <div class="carousel">
+        <div class="slides">
+            <img src="Unknown.jpeg" alt="Chicken Plate">
+            <img src="Unknown1.jpeg" alt="Chicken Roast">
+        </div>
+    </div>
+
+    <div class="image-row">
+        <img src="Unknown2.jpeg" alt="Quest Image">
+        <img src="mad-angry.png.gif" alt="Mickey Mouse">
+    </div>
+
+    <form id="orderForm">
+        <div class="form-section">
+            <label>Enter your Name:</label>
+            <input type="text" id="customerName" required><br><br>
+
+            <label>Choose the taste:</label><br>
+            <input type="checkbox" name="taste" value="Halal"> Halal<br>
+            <input type="checkbox" name="taste" value="Spicy"> Spicy (+$1)<br>
+            <input type="checkbox" name="taste" value="With Salad"> With Salad (+$1)<br><br>
+
+            <label>Choose the size:</label><br>
+            <input type="radio" name="size" value="Whole" required> Whole ($100)<br>
+            <input type="radio" name="size" value="Half"> Half ($50)<br>
+            <input type="radio" name="size" value="Quarter"> Quarter ($25)<br><br>
+
+            <label>Choose the mode of delivery:</label><br>
+            <select id="delivery">
+                <option value="2.5">Same day (after 3 hours of the order) ($2.5)</option>
+                <option value="5">Next day ($5)</option>
+            </select><br><br>
+        </div>
+
+        <div class="button-group">
+            <button type="button" onclick="calculateTotal()">Submit Order</button>
+            <button type="button" onclick="window.location.reload()">Refresh Page</button>
+        </div>
+    </form>
+
+<script>
+function calculateTotal() {
+    const name = document.getElementById('customerName').value;
+    const tastes = document.querySelectorAll('input[name="taste"]:checked');
+    const size = document.querySelector('input[name="size"]:checked');
+    const deliveryCost = parseFloat(document.getElementById('delivery').value);
+
+    if (!name || !size) {
+        alert("Please enter your name and choose a chicken size.");
+        return;
+    }
+
+    let total = 0;
+    let selectedSize = size.value;
+    let sizeCost = selectedSize === 'Whole' ? 100 : selectedSize === 'Half' ? 50 : 25;
+    total += sizeCost;
+
+    let tasteList = [];
+    tastes.forEach(taste => {
+        tasteList.push(taste.value);
+        if (taste.value === 'Spicy' || taste.value === 'With Salad') {
+            total += 1;
+        }
+    });
+
+    total += deliveryCost;
+
+    const orderSummary = `Customer Name: ${name}\n` +
+                         `Chicken Size: ${selectedSize} ($${sizeCost})\n` +
+                         `Taste Options: ${tasteList.length > 0 ? tasteList.join(', ') : 'None'}\n` +
+                         `Delivery Cost: $${deliveryCost}\n` +
+                         `Total Bill: $${total.toFixed(2)}`;
+
+    alert(orderSummary);
+}
+</script>
+
+</body>
+</html>
